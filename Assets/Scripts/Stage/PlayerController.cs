@@ -25,22 +25,19 @@ public class PlayerController : MonoBehaviour
 
     private void MoveVertically()
     {
-        if (playerType != PlayerType.CPU) rigidBody.linearVelocity = direction * speed;
+        if (playerType != PlayerType.CPU)
+        {
+            rigidBody.linearVelocity = direction * speed;
+        }
         else
         {
             Vector3 target = new(transform.position.x, ballController.transform.position.y, transform.position.z);
-            float distance = Vector3.Distance(transform.position, target); // To avoid "jiggling/exact match" behavior
+            float distance = Vector3.Distance(transform.position, target);
 
-            if (distance > 0.65f)
+            if ((distance > 0.3f && distance < 0.35f) || distance > 0.7f) // To avoid "jiggling/exact match" behavior
             {
                 transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime * 0.9f);
             }
-
-            //float yDistance = ballController.transform.position.y - transform.position.y;
-            //lastDirection = direction;
-            //direction = yDistance > 0.75f ? Vector2.up : Vector2.down;
-            //rigidBody.linearVelocity = direction * speed;
-
         } 
     }
 

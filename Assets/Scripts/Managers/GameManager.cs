@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public GameObject pauseMenu, winCanvas;
     public TextMeshProUGUI playerOneScoreUI, playerTwoScoreUI, winnerUI;
 
+    int maxScore = 5;
+
     void Start()
     {
         Time.timeScale = 1; // Ensures the game will run properly when the scene is loaded
@@ -28,6 +30,21 @@ public class GameManager : MonoBehaviour
     {
         playerOneScoreUI.text = PlayerOneScore.ToString();
         playerTwoScoreUI.text = PlayerTwoScore.ToString();
+    }
+
+    private void FinishGame()
+    {
+        if (PlayerOneScore == maxScore || PlayerTwoScore == maxScore)
+        {
+            string winner = PlayerOneScore == maxScore ? "P1" : PlayerTwoScore == maxScore && DataManager.instance.Players == 2 ? "P2" : "CPU";
+            winnerUI.text = winner + " wins!";
+
+            float canvasX = winner == "P1" ? 400.88f : 408.8f;
+            winCanvas.transform.position = new(canvasX, 130.78f);
+            winCanvas.SetActive(true);
+
+            Time.timeScale = 0;
+        }
     }
 
     private void InterruptGame()
@@ -51,29 +68,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void Quit()
-    {
-        if (Time.timeScale == 0) SceneManager.LoadScene("Menu");
-    }
-
-    private void FinishGame()
-    {
-        if (PlayerOneScore == 10 || PlayerTwoScore == 10)
-        {
-            string winner = PlayerOneScore == 10 ? "P1" : PlayerTwoScore == 10 && DataManager.instance.Players == 2 ? "P2" : "CPU";
-            winnerUI.text = winner + " wins!";
-
-            float canvasX = winner == "P1" ? 400.88f : 408.8f;
-            winCanvas.transform.position = new(canvasX, 130.78f);
-            winCanvas.SetActive(true);
-
-            Time.timeScale = 0;
-        }
-    }
-
     public void ResetGame()
     {
         if (Time.timeScale == 0) SceneManager.LoadScene("Stage");
+    }
+
+    public void Quit()
+    {
+        if (Time.timeScale == 0) SceneManager.LoadScene("Menu");
     }
 
 }
